@@ -42,7 +42,9 @@ App = {
   loadAccount: async () => {
     // Set the current blockchain account
     try {
-      App.account = await web3.eth.requestAccounts()[0];
+      App.account = await web3.eth.requestAccounts().then((res) => {
+        return res[0];
+      });
     } catch (error) {
       console.log(error);
     }
@@ -114,7 +116,7 @@ App = {
   createTask: async () => {
     App.setLoading(true);
     const content = $("#newTask").val();
-    await App.todoList.createTask(content);
+    await App.todoList.createTask(content, { from: App.account });
     window.location.reload();
   },
 
