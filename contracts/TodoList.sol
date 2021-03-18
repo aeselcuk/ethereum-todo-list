@@ -18,6 +18,11 @@ contract TodoList {
         bool completed
     );
 
+    event StatusToggled(
+        uint id,
+        bool completed
+    );
+
     constructor() {
         createTask("First task created by the constructor!");
     }
@@ -29,10 +34,14 @@ contract TodoList {
         emit TaskCreated(taskCount, _content, false);
     }
 
-    // function toggleCompleted(uint _id) public {
-    //     Task memory task = getTask(_id);
-    //     !task.completed;
-    // }
+    function toggleCompleted(uint _id) public {
+        Task memory task = getTask(_id);
+        task.completed = !task.completed;
+        
+        tasks[_id] = task;
+
+        emit StatusToggled(_id, task.completed);
+    }
 
     function getTask(uint _id) view internal returns(Task memory ) {
         return tasks[_id];
